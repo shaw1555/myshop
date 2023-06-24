@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myshop/color_theme/color_theme.dart';
 import 'package:myshop/drawer/my_drawer.dart';
 import 'package:myshop/home/my_home_content.dart';
+import 'package:myshop/services/product_service.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,7 +35,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final ColorTheme colorTheme = ColorTheme();
+  late ProductService productService;
+
+  @override
+  void initState() {
+    super.initState();
+    productService = ProductService();
+    productService.generateProduct();
+  }
 
   @override
   Widget build(BuildContext context) {
