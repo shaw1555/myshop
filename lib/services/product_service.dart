@@ -2,11 +2,27 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:myshop/model/product.dart';
 
-class ProductService {
+class ProductService with ChangeNotifier {
   static final List<Product> _lstProduct = [];
 
   List<Product> getProductList() {
     return _lstProduct;
+  }
+
+  List<Product> getProductOrderList() {
+    return _lstProduct.where((x) => x.orderQty > 0).toList();
+  }
+
+  void updateOrderQty(String productId, bool addQty) {
+    var product = _lstProduct.firstWhere((x) => x.productId == productId);
+
+    if (addQty) {
+      product.orderQty++;
+    } else {
+      if (product.orderQty > 0) product.orderQty--;
+    }
+
+    notifyListeners();
   }
 
   void generateProduct() {
@@ -24,8 +40,8 @@ class ProductService {
       String randomText = generateRandomText(length);
 
       Image img = Image.asset('assets/images/car.jpg');
-      if(i%2==0)img = Image.asset('assets/images/ph.jpg');
-      if(i%3==0)img = Image.asset('assets/images/pizza.jpg');
+      if (i % 2 == 0) img = Image.asset('assets/images/ph.jpg');
+      if (i % 3 == 0) img = Image.asset('assets/images/pizza.jpg');
 
       final ctl = Product(
           productId: i.toString(),

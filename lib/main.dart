@@ -3,6 +3,7 @@ import 'package:myshop/color_theme/color_theme.dart';
 import 'package:myshop/drawer/my_drawer.dart';
 import 'package:myshop/home/my_home_content.dart';
 import 'package:myshop/services/product_service.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,13 +16,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: title,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: ColorTheme.primaryColorBg),
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ProductService>(
+          create: (context) => ProductService(),
+        ),
+      ],
+      child: MaterialApp(
+        title: title,
+        theme: ThemeData(
+          colorScheme:
+              ColorScheme.fromSeed(seedColor: ColorTheme.primaryColorBg),
+          useMaterial3: true,
+        ),
+        home: MyHomePage(title: title),
       ),
-      home: MyHomePage(title: title),
     );
   }
 }

@@ -2,16 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:myshop/color_theme/color_theme.dart';
 import 'package:myshop/model/product.dart';
+import 'package:myshop/services/product_service.dart';
 import 'package:myshop/widgets/buttonOrderQty.dart';
+import 'package:provider/provider.dart';
 
-class Item extends StatelessWidget {
+class Item extends StatefulWidget {
   final Product product;
 
   const Item({Key? key, required this.product}) : super(key: key);
 
+  @override
+  State<Item> createState() => _ItemState();
+}
+
+class _ItemState extends State<Item> {
   void orderQtyEvent(bool addQty) {
-    print('h1');
-    print(addQty);
+    ProductService service =
+        Provider.of<ProductService>(context, listen: false);
+    service.updateOrderQty(widget.product.productId, addQty);
   }
 
   @override
@@ -20,7 +28,7 @@ class Item extends StatelessWidget {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          product.photo, //Image.asset('assets/images/sale.png'),
+          widget.product.photo, //Image.asset('assets/images/sale.png'),
           const SizedBox(height: 8.0),
           Row(
             children: [
@@ -28,10 +36,11 @@ class Item extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    product.productName,
+                    widget.product.productName,
                     style: TextStyle(color: ColorTheme.primaryColorBg),
                   ),
-                  Text(NumberFormat.decimalPattern().format(product.price))
+                  Text(NumberFormat.decimalPattern()
+                      .format(widget.product.price))
                 ],
               ),
               Expanded(
@@ -52,7 +61,7 @@ class Item extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    product.orderQty.toString(),
+                    widget.product.orderQty.toString(),
                     style: TextStyle(
                       color: ColorTheme.primaryColorFontOnBg,
                       fontSize: 16.0,
